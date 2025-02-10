@@ -14,7 +14,7 @@
     function toggleDivs() {
         let checkboxes = document.querySelectorAll(".class-toggle");
         let divs = document.querySelectorAll(".infocard.clearfix.guide-class-setups");
-    
+
         checkboxes.forEach((checkbox, index) => {
             if (divs[index]) {
                 let position = index;
@@ -22,14 +22,13 @@
                 // Loops to hide until endgame
                 for (let i = 0; i < 9; i++) {
                     divs[position].style.display = checkbox.checked ? "none" : "";
-                    position += 5;  
+                    position += 5;
                 }
-                
+
             }
         });
-        
+
     }
-    
 
     // Function to toggle all checkboxes
     function toggleAll(state) {
@@ -61,19 +60,12 @@
                 container.appendChild(label);
             });
 
-            // Add Enable/Disable All checkboxes
+            // Add renable all checkboxes
             let enableAll = document.createElement("button");
-            enableAll.innerText = "Enable All";
+            enableAll.innerText = "Renable All";
             enableAll.style.marginLeft = "10px";
             enableAll.addEventListener("click", () => toggleAll(false));
-
-            let disableAll = document.createElement("button");
-            disableAll.innerText = "Disable All";
-            disableAll.style.marginLeft = "10px";
-            disableAll.addEventListener("click", () => toggleAll(true));
-
             container.appendChild(enableAll);
-            container.appendChild(disableAll);
 
             headline.parentElement.parentElement.insertBefore(container, headline.parentElement);
         }
