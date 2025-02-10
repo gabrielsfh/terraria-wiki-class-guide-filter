@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hide Specific Guide Class Setups For Terraria Wiki
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  Hides elements when specific checkboxes are toggled
 // @author       gabrielsfh
 // @match        https://terraria.wiki.gg/wiki/Guide:Class_setups
@@ -19,12 +19,11 @@
             if (divs[index]) {
                 let position = index;
 
-                // Loops to hide until endgame
+                // Loops to show/hide a specific class 
                 for (let i = 0; i < 9; i++) {
-                    divs[position].style.display = checkbox.checked ? "none" : "";
+                    divs[position].style.display = checkbox.checked ? "" : "none";
                     position += 5;
                 }
-
             }
         });
 
@@ -80,10 +79,11 @@
                 let checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.className = "class-toggle";
+                checkbox.checked = true;
                 checkbox.addEventListener("change", toggleDivs);
 
                 label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(` Hide ${name}`));
+                label.appendChild(document.createTextNode(`${name}`));
                 container.appendChild(label);
             });
 
@@ -91,7 +91,7 @@
             let enableAll = document.createElement("button");
             enableAll.innerText = "Renable All";
             enableAll.style.marginLeft = "10px";
-            enableAll.addEventListener("click", () => toggleAll(false));
+            enableAll.addEventListener("click", () => toggleAll(true));  
             container.appendChild(enableAll);
 
             headline.parentElement.parentElement.insertBefore(container, headline.parentElement);
