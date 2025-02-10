@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hide Specific Guide Class Setups For Terraria Wiki
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Hides elements when specific checkboxes are toggled
 // @author       gabrielsfh
 // @match        https://terraria.wiki.gg/wiki/Guide:Class_setups
@@ -28,6 +28,8 @@
             }
         });
 
+        // Save checkbox state to localStorage
+        saveCheckboxState();
     }
 
     // Function to toggle all checkboxes
@@ -36,6 +38,31 @@
             checkbox.checked = state;
         });
         toggleDivs();
+    }
+
+    // Save the state of checkboxes to localStorage
+    function saveCheckboxState() {
+        let checkboxStates = {};
+        document.querySelectorAll(".class-toggle").forEach((checkbox, index) => {
+            checkboxStates[index] = checkbox.checked;
+        });
+        localStorage.setItem("checkboxStates", JSON.stringify(checkboxStates));
+    }
+
+    // Load saved checkbox states from localStorage
+    function loadCheckboxState() {
+        let savedStates = localStorage.getItem("checkboxStates");
+        if (savedStates) {
+            savedStates = JSON.parse(savedStates);
+            document.querySelectorAll(".class-toggle").forEach((checkbox, index) => {
+                if (savedStates[index] !== undefined) {
+                    checkbox.checked = savedStates[index];
+                }
+            });
+
+            // Apply the saved states
+            toggleDivs();
+        }
     }
 
     // Add the checkboxes after Contents
@@ -68,6 +95,9 @@
             container.appendChild(enableAll);
 
             headline.parentElement.parentElement.insertBefore(container, headline.parentElement);
+
+            // Load saved checkbox state after adding checkboxes
+            loadCheckboxState();
         }
     }
 
