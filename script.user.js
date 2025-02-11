@@ -19,7 +19,7 @@
             if (divs[index]) {
                 let position = index;
 
-                // Loops to show/hide a specific class 
+                // Loops to show/hide a specific class
                 for (let i = 0; i < 9; i++) {
                     divs[position].style.display = checkbox.checked ? "" : "none";
                     position += 5;
@@ -69,7 +69,7 @@
         let headline = document.querySelector("h2 span#Pre-Bosses");
         if (headline) {
             let container = document.createElement("div");
-            container.style.marginBottom = "10px";
+            container.style.marginBottom = "1px";
 
             let names = ["Melee", "Ranged", "Magic", "Summoning", "Mixed"];
             names.forEach((name, index) => {
@@ -82,6 +82,10 @@
                 checkbox.checked = true;
                 checkbox.addEventListener("change", toggleDivs);
 
+                checkbox.style.marginRight = "5px";
+
+
+
                 label.appendChild(checkbox);
                 label.appendChild(document.createTextNode(`${name}`));
                 container.appendChild(label);
@@ -90,11 +94,16 @@
             // Add renable all checkboxes
             let enableAll = document.createElement("button");
             enableAll.innerText = "Renable All";
-            enableAll.style.marginLeft = "10px";
-            enableAll.addEventListener("click", () => toggleAll(true));  
+
+            enableAll.addEventListener("click", () => toggleAll(true));
             container.appendChild(enableAll);
 
             headline.parentElement.parentElement.insertBefore(container, headline.parentElement);
+            
+            enableAll.style.borderColor="#EAE3D1";
+            enableAll.style.textDecoration="#EAE3D1";
+            enableAll.style.color="#EAE3D1";
+            enableAll.style.backgroundColor="#5a433a";
 
             // Load saved checkbox state after adding checkboxes
             loadCheckboxState();
