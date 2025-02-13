@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Hide Specific Guide Class Setups For Terraria Wiki
+// @name         Terraria Wiki Class Setup Guide Filter
 // @namespace    http://tampermonkey.net/
 // @version      0.4
-// @description  Hides elements when specific checkboxes are toggled
+// @description  You are able to hide all the classes you dont want to see in terraria wiki class setups 
 // @author       gabrielsfh
 // @match        https://terraria.wiki.gg/wiki/Guide:Class_setups
 // @grant        GM_addStyle
