@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Terraria Wiki Class Setup Guide Filter
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.5
 // @description  You are able to hide all the classes you dont want to see in terraria wiki class setups 
 // @author       gabrielsfh
 // @match        https://terraria.wiki.gg/wiki/Guide:Class_setups
@@ -14,7 +14,16 @@
     function toggleDivs() {
         let checkboxes = document.querySelectorAll(".class-toggle");
         let divs = document.querySelectorAll(".infocard.clearfix.guide-class-setups");
+        
+        // Gets the amount of checkboxes toggled
+        let checkedCount = [...checkboxes].filter(cb => cb.checked).length;
 
+        // Prevents the only toggled checkbox to be disabled when it's clicked at it
+        if (checkedCount === 0) {
+            this.checked = true; 
+            return;
+        }
+        
         checkboxes.forEach((checkbox, index) => {
             if (divs[index]) {
                 let position = index;
@@ -27,10 +36,9 @@
             }
         });
 
-        // Save checkbox state to localStorage
         saveCheckboxState();
     }
-
+    
     // Toggle all checkboxes when button is clicked
     function toggleAll(state) {
         document.querySelectorAll(".class-toggle").forEach(checkbox => {
@@ -39,7 +47,7 @@
         toggleDivs();
     }
 
-    // Save the state of checkboxes to localStorage
+    // Saves the order of the toggled checkboxes to localStorage
     function saveCheckboxState() {
         let checkboxStates = {};
         document.querySelectorAll(".class-toggle").forEach((checkbox, index) => {
@@ -48,7 +56,7 @@
         localStorage.setItem("checkboxStates", JSON.stringify(checkboxStates));
     }
 
-    // Load saved checkbox states from localStorage
+    // Load saved checkbox order from localStorage
     function loadCheckboxState() {
         let savedStates = localStorage.getItem("checkboxStates");
         if (savedStates) {
