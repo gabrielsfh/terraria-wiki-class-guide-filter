@@ -77,7 +77,10 @@
         let headline = document.querySelector("h2 span#Pre-Bosses");
         if (headline) {
             let container = document.createElement("div");
+            let checkboxes = document.createElement("div");
+
             container.className = "container";
+            checkboxes.className = "checkboxes";
 
             let names = ["Melee", "Ranged", "Magic", "Summoning", "Mixed"];
             names.forEach((name, index) => {
@@ -92,7 +95,8 @@
 
                 label.appendChild(checkbox);
                 label.appendChild(document.createTextNode(`${name}`));
-                container.appendChild(label);
+                checkboxes.appendChild(label);
+                container.appendChild(checkboxes);
             });
 
             // Add renable all checkboxes button
@@ -113,6 +117,37 @@
 
     // All the CSS
     GM_addStyle(`
+        .container {
+            display: flex;
+        }
+    
+        @media (max-width: 492px) {
+            .container {
+                flex-direction: column;
+            }
+    
+            .checkboxes { 
+                margin: 0 auto;
+                width: fit-content; 
+            }
+        }
+    
+        @media (max-width: 400px) {
+            .checkboxes {
+                margin: 0 auto;
+                width: fit-content;
+                display: grid;
+                grid-template-columns: repeat(4, auto); 
+            }
+    
+            .checkboxes label:last-child {
+                grid-column: span 4; 
+                text-align: center;  
+                margin: 0 auto;
+                width: fit-content; 
+            }
+        }
+    
         .enableAll {
             border: 2px solid #eae3d1;
             text-decoration: none;
@@ -124,31 +159,31 @@
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
             cursor: pointer;
         }
-
+    
         .enableAll:hover {
             background-color: #6b4f44;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
         }
-
+    
         .enableAll:active {
             background-color: #8b6e5f; /* Active state color */
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); /* Optional */
         }
-
+    
         .class-toggle {
             margin-right: 5px;
             accent-color: #9FECF0;
             background-color: #5e3333;
         }
-
+    
         .label {
             margin-right: 10px;
         }
-
+    
         .div {
             margin-bottom: 1px;
         }
-    `);
+    `);       
 
     // Wait for the page to load before adding checkboxes
     window.addEventListener("load", addCheckboxes);
