@@ -2,7 +2,7 @@
 // @name         Terraria Wiki Class Setup Guide Filter
 // @namespace    http://tampermonkey.net/
 // @version      0.5
-// @description  You are able to hide all the classes you dont want to see in terraria wiki class setups 
+// @description  You are able to hide all the classes you dont want to see in terraria wiki class setups
 // @author       gabrielsfh
 // @match        https://terraria.wiki.gg/wiki/Guide:Class_setups
 // @grant        GM_addStyle
@@ -14,16 +14,16 @@
     function toggleDivs() {
         let checkboxes = document.querySelectorAll(".class-toggle");
         let divs = document.querySelectorAll(".infocard.clearfix.guide-class-setups");
-        
+
         // Gets the amount of checkboxes toggled
         let checkedCount = [...checkboxes].filter(cb => cb.checked).length;
 
         // Prevents the only toggled checkbox to be disabled when it's clicked at it
         if (checkedCount === 0) {
-            this.checked = true; 
+            this.checked = true;
             return;
         }
-        
+
         checkboxes.forEach((checkbox, index) => {
             if (divs[index]) {
                 let position = index;
@@ -38,7 +38,7 @@
 
         saveCheckboxState();
     }
-    
+
     // Toggle all checkboxes when button is clicked
     function toggleAll(state) {
         document.querySelectorAll(".class-toggle").forEach(checkbox => {
@@ -74,80 +74,67 @@
 
     // Add the checkboxes after Contents
     function addCheckboxes() {
-        let headline = document.querySelector("h2 span#Pre-Bosses");
-        if (headline) {
-            let container = document.createElement("div");
-            let checkboxes = document.createElement("div");
+    let headline = document.querySelector("h2 span#Pre-Bosses");
+    if (!headline) return;
 
-            container.className = "container";
-            checkboxes.className = "checkboxes";
-
-            let names = ["Melee", "Ranged", "Magic", "Summoning", "Mixed"];
-            names.forEach((name, index) => {
-                let label = document.createElement("label");
-                label.className = "label";
-
-                let checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.className = "class-toggle";
-                checkbox.checked = true;
-                checkbox.addEventListener("change", toggleDivs);
-
-                label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(`${name}`));
-                checkboxes.appendChild(label);
-                container.appendChild(checkboxes);
-            });
-
-            // Add renable all checkboxes button
-            let enableAll = document.createElement("button");
-            enableAll.innerText = "Renable All";
-
-            enableAll.addEventListener("click", () => toggleAll(true));
-            container.appendChild(enableAll);
-
-            headline.parentElement.parentElement.insertBefore(container, headline.parentElement);
-          
-            enableAll.classList.add('enableAll');
-
-            // Load saved checkbox state after adding checkboxes
-            loadCheckboxState();
-        }
+    let paragraph = headline.closest("h2").nextElementSibling;
+    while (paragraph && paragraph.tagName !== "P") {
+        paragraph = paragraph.nextElementSibling;
     }
+
+    if (!paragraph) return;
+
+    let container = document.createElement("div");
+    let checkboxes = document.createElement("div");
+
+    container.className = "container";
+    checkboxes.className = "checkboxes";
+
+    let names = ["Melee", "Ranged", "Magic", "Summoning", "Mixed"];
+    names.forEach((name) => {
+        let label = document.createElement("label");
+        label.className = "label";
+
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "class-toggle";
+        checkbox.checked = true;
+        checkbox.addEventListener("change", toggleDivs);
+
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(`${name}`));
+        checkboxes.appendChild(label);
+        container.appendChild(checkboxes);
+    });
+
+    // Add renable all checkboxes button
+    let enableAll = document.createElement("button");
+    let buttonContainer = document.createElement("div");
+
+    enableAll.innerText = "Renable All";
+    enableAll.addEventListener("click", () => toggleAll(true));
+
+    container.appendChild(buttonContainer);
+    buttonContainer.appendChild(enableAll);
+
+    paragraph.parentNode.insertBefore(container, paragraph.nextSibling);
+
+    enableAll.classList.add("enableAll");
+    buttonContainer.classList.add("buttonContainer");
+
+    // Load saved checkbox state after adding checkboxes
+    loadCheckboxState();
+}
+
 
     // All the CSS
     GM_addStyle(`
         .container {
             display: flex;
+            padding-bottom: 10px;
+            padding-top: 10px;
         }
-    
-        @media (max-width: 492px) {
-            .container {
-                flex-direction: column;
-            }
-    
-            .checkboxes { 
-                margin: 0 auto;
-                width: fit-content; 
-            }
-        }
-    
-        @media (max-width: 400px) {
-            .checkboxes {
-                margin: 0 auto;
-                width: fit-content;
-                display: grid;
-                grid-template-columns: repeat(4, auto); 
-            }
-    
-            .checkboxes label:last-child {
-                grid-column: span 4; 
-                text-align: center;  
-                margin: 0 auto;
-                width: fit-content; 
-            }
-        }
-    
+
         .enableAll {
             border: 2px solid #eae3d1;
             text-decoration: none;
@@ -159,31 +146,72 @@
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
             cursor: pointer;
         }
-    
+
         .enableAll:hover {
             background-color: #6b4f44;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
         }
-    
+
         .enableAll:active {
             background-color: #8b6e5f; /* Active state color */
             box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); /* Optional */
         }
-    
+
         .class-toggle {
             margin-right: 5px;
             accent-color: #9FECF0;
             background-color: #5e3333;
         }
-    
+
         .label {
             margin-right: 10px;
         }
-    
+
         .div {
             margin-bottom: 1px;
         }
-    `);       
+
+        @media (max-width: 492px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .checkboxes {
+                margin: 0 auto;
+                width: fit-content;
+            }
+
+            .buttonContainer {
+                margin: 0 auto;
+                width: fit-content;
+            }
+
+            .enableAll {
+                padding: 5px 150px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                flex-direction: row;
+            }
+            
+            .buttonContainer {
+                margin: auto;
+               
+            }
+
+            .checkboxes {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .enableAll {
+                padding: 5px 10px;
+            }
+
+        }
+    `);
 
     // Wait for the page to load before adding checkboxes
     window.addEventListener("load", addCheckboxes);
